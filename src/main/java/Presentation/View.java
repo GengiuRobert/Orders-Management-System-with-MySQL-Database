@@ -19,8 +19,9 @@ public class View extends JFrame {
     public JButton clientOperationsButton;
     public JButton productOperationsButton;
     public JButton createProductOrdersButton;
+    public JButton billOperationsButton;
     public View(){
-        setPreferredSize(new Dimension(450, 300));
+        setPreferredSize(new Dimension(450, 350));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new JPanel();
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -45,8 +46,14 @@ public class View extends JFrame {
         createProductOrdersButton.setFont(new Font("Arial", Font.BOLD, 20));
         createProductOrdersButton.setBackground(new Color(144, 238, 144));
 
+        billOperationsButton = new JButton("Bill Operations");
+        billOperationsButton.setBounds(110, 215, 220, 50);
+        billOperationsButton.setFont(new Font("Arial", Font.BOLD, 20));
+        billOperationsButton.setBackground(new Color(144, 238, 144));
+
 
         panel.add(welcomeLabel);
+        panel.add(billOperationsButton);
         panel.add(clientOperationsButton);
         panel.add(productOperationsButton);
         panel.add(createProductOrdersButton);

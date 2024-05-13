@@ -44,6 +44,13 @@ public class Controller {
                 CreateOrderController createOrderController = new CreateOrderController(createOrderView);
             }
         });
+
+        view.billOperationsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BillTableView createOrderView = new BillTableView();
+            }
+        });
     }
 
 }

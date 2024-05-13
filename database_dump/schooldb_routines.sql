@@ -16,24 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `orderr`
+-- Dumping events for database 'schooldb'
 --
 
-DROP TABLE IF EXISTS `orderr`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `orderr` (
-  `id` int NOT NULL,
-  `clientid` int DEFAULT NULL,
-  `productid` int DEFAULT NULL,
-  `clientname` varchar(100) DEFAULT NULL,
-  `productname` varchar(100) DEFAULT NULL,
-  `quantity` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_client_id_delete` (`clientid`),
-  CONSTRAINT `fk_client_id_delete` FOREIGN KEY (`clientid`) REFERENCES `client` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Dumping routines for database 'schooldb'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

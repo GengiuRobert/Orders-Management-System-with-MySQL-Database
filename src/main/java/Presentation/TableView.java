@@ -18,6 +18,12 @@ import java.util.List;
  * @author Gengiu Robert Constantin
  * @since April 20, 2024
  */
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.lang.reflect.Field;
+import java.util.List;
+
 public class TableView extends JFrame {
     public JPanel panel;
     public JTable tableView;
@@ -41,52 +47,25 @@ public class TableView extends JFrame {
 
         if (!objects.isEmpty()) {
             Object firstObject = objects.get(0);
-            if (firstObject instanceof Client) {
-                model.addColumn("ID");
-                model.addColumn("Name");
-                model.addColumn("Email");
-                model.addColumn("Age");
-                for (Object obj : objects) {
-                    Client client = (Client) obj;
-                    model.addRow(new Object[]{
-                            client.getId(),
-                            client.getName(),
-                            client.getEmail(),
-                            client.getAge()
-                    });
+            if (firstObject != null) {
+                Field[] fields = firstObject.getClass().getDeclaredFields();
+                for (Field field : fields) {
+                    model.addColumn(field.getName());
                 }
-            } else if (firstObject instanceof Orderr) {
-                model.addColumn("ID");
-                model.addColumn("Client ID");
-                model.addColumn("Product ID");
-                model.addColumn("Client Name");
-                model.addColumn("Product Name");
-                model.addColumn("Product Quantity");
-                for (Object obj : objects) {
-                    Orderr order = (Orderr) obj;
-                    model.addRow(new Object[]{
-                            order.isId(),
-                            order.getClientID(),
-                            order.getProductID(),
-                            order.getClientName(),
-                            order.getProductName(),
-                            order.isQuantity()
-                    });
-                }
-            } else if (firstObject instanceof Product) {
-                model.addColumn("ID");
-                model.addColumn("Name");
-                model.addColumn("Price");
-                model.addColumn("Quantity");
 
                 for (Object obj : objects) {
-                    Product product = (Product) obj;
-                    model.addRow(new Object[]{
-                            product.getId(),
-                            product.getName(),
-                            product.getPrice(),
-                            product.getQuantity()
-                    });
+                    Object[] rowData = new Object[fields.length];
+                    int i = 0;
+                    for (Field field : fields) {
+                        field.setAccessible(true);
+                        try {
+                            rowData[i] = field.get(obj);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                        i++;
+                    }
+                    model.addRow(rowData);
                 }
             }
         }

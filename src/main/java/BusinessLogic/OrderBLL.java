@@ -46,4 +46,7 @@ public class OrderBLL  {
         orderDAO.insert(order);
     }
 
+    public void updateOrder(Orderr order) {orderDAO.update(order);}
+
+    public void deleteOrder(Orderr order) {orderDAO.delete(order);}
 }

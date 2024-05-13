@@ -3,12 +3,15 @@ package Presentation;
 import BusinessLogic.ClientBLL;
 import BusinessLogic.OrderBLL;
 import BusinessLogic.ProductBLL;
+import DataAccess.BillDAO;
+import Model.Bill;
 import Model.Client;
 import Model.Orderr;
 import Model.Product;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.List;
 /**
  * @Author: Gengiu Robert Constantin
@@ -33,6 +36,8 @@ public class CreateOrderController {
         showClients();
         showProducts();
         showOrders();
+        addDeleteClientListener();
+        addUpdateClientListener();
     }
 
     private void createNewOrder() {
@@ -51,6 +56,13 @@ public class CreateOrderController {
                 int newQuantity = availableQuantity - quantity;
                 productBLL.updateProductQuantity(productId, newQuantity);
                 Orderr order = new Orderr(orderId, clientId, productId, clientName, productName, quantity);
+
+                BillDAO billDAO = new BillDAO();
+                BigDecimal totalPrice = BigDecimal.valueOf(product.getPrice()).multiply(BigDecimal.valueOf(quantity));
+                Bill bill = new Bill(orderId, clientName, productName, quantity, totalPrice);
+                billDAO.insert(bill);
+
+                System.out.println(order.toString());
                 OrderBLL orderBLL = new OrderBLL();
                 orderBLL.insertOrder(order);
 
@@ -62,7 +74,19 @@ public class CreateOrderController {
             createOrderView.mandatoryCreateOrderLabel.setText("Product not found!");
         }
     }
+    private void updateOrder() {
+        orderId = createOrderView.getUpdateOrderIDTextField();
+        clientId = createOrderView.getUpdateOrderIDClientTextField();
+        productId = createOrderView.getUpdateOrderIDProductTextField();
+        quantity = createOrderView.getUpdateOrderQuantityTextField();
+        clientName = createOrderView.getUpdateOrderClientNameTextField();
+        productName = createOrderView.getUpdateOrderProductNameTextField();
 
+        OrderBLL orderBLL = new OrderBLL();
+        Orderr order = new Orderr(orderId, clientId, productId, clientName, productName, quantity);
+        orderBLL.updateOrder(order);
+        System.out.println("Order updated");
+    }
     private void showClientsView() {
         ClientBLL clientBLL = new ClientBLL();
         List<Client> clients = clientBLL.getAllClients();
@@ -78,12 +102,36 @@ public class CreateOrderController {
         List<Orderr> clients = orderBLL.getAllOrders();
         TableView tableView = new TableView(clients);
     }
-
+    private void deleteOrder() {
+        orderId = createOrderView.getDeleteOrderIDTextField();
+        OrderBLL orderBLL = new OrderBLL();
+        Orderr orderr = orderBLL.findOrderById(orderId);
+        orderBLL.deleteOrder(orderr);
+        System.out.println("Order deleted");
+    }
     private void addCreateClientListener() {
         createOrderView.createOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 createNewOrder();
+            }
+        });
+    }
+
+    private void addUpdateClientListener() {
+        createOrderView.updateOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateOrder();
+            }
+        });
+    }
+
+    private void addDeleteClientListener() {
+        createOrderView.deleteOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteOrder();
             }
         });
     }
